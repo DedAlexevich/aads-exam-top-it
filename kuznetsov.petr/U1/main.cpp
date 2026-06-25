@@ -1,5 +1,13 @@
 #include <iostream>
+#include <cstddef>
 #include <fstream>
+#include "person.hpp"
+
+namespace kuznetsov {
+  Person readPerson(std::istream& in);
+
+
+}
 
 int main(int argc, char** argv)
 {
@@ -13,7 +21,7 @@ int main(int argc, char** argv)
   }
 
   if (argc > 1) {
-    for (size_t i = 1; i < argc; ++i) {
+    for (int i = 1; i < argc; ++i) {
       std::string str = argv[i];
       if (str.find("in:") == 0) {
         std::string path = str.substr(3);
@@ -43,3 +51,19 @@ int main(int argc, char** argv)
 
 }
 
+kuznetsov::Person kuznetsov::readPerson(std::istream& in)
+{
+  size_t id;
+  std::string inf;
+  in >> id;
+  char c;
+  while (in.peek() == ' ') {
+    in.get(c);
+  }
+  if (!in || c == '\n') {
+    in.setstate(std::ios::failbit);
+    return {};
+  }
+  in >> inf;
+  return Person{id, inf};
+}
