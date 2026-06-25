@@ -36,6 +36,8 @@ int main(int argc, char** argv)
         std::string path = str.substr(4);
         oPath = path;
         countOut++;
+      } else {
+        return 1;
       }
     }
   }
@@ -97,7 +99,7 @@ kuznetsov::Person kuznetsov::readPerson(std::istream& in, bool& success)
   size_t id;
   std::string inf;
   in >> id;
-  char c;
+  char c = ' ';
   while (in.peek() == ' ') {
     in.get(c);
   }
