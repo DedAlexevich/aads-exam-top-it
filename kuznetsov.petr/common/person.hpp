@@ -10,6 +10,8 @@ namespace kuznetsov {
     std::string info;
   };
 
+  Person readPerson(std::istream& in, bool& success);
+  bool equalPersons(const Person& a, const Person& b);
 }
 
 #endif
