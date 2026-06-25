@@ -11,7 +11,7 @@ namespace kuznetsov {
   };
 
   Meeting readMeeting(std::istream& in, bool& success);
-  darray< Meeting > readArrayMeets(std::istream& in, size_t& cSucces, size_t& cFail);
+  darray< Meeting > readArrayMeets(std::istream& in);
 
 }
 
