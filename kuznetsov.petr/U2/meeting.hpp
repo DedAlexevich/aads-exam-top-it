@@ -10,8 +10,8 @@ namespace kuznetsov {
     size_t time;
   };
 
-  Meeting readMeeting(std::istream& in, bool& success);
-  darray< Meeting > readArrayMeets(std::istream& in);
+  Meeting readMeeting(std::istream& in, bool& success, darray< Person >& p);
+  darray< Meeting > readArrayMeets(std::istream& in, darray< Person >& p);
 
 }
 

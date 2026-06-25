@@ -6,6 +6,10 @@
 
 namespace kuznetsov {
 
+  namespace detail {
+    void sort(darray< size_t >&);
+  }
+
   void anons(std::istream&, std::ostream&, darray< Meeting >&, darray< Person >&);
   void deanon(std::istream&, std::ostream&, darray< Meeting >&, darray< Person >&);
   void redesc(std::istream&, std::ostream&, darray< Meeting >&, darray< Person >&);
