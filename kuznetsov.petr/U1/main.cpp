@@ -1,11 +1,13 @@
 #include <iostream>
 #include <cstddef>
 #include <fstream>
+#include <limits>
 #include "person.hpp"
 #include "darray.hpp"
 
 namespace kuznetsov {
   Person readPerson(std::istream& in);
+  bool equalPersons(const Person& a, const Person& b);
 
 
 }
@@ -50,11 +52,14 @@ int main(int argc, char** argv)
   if (countInp > 1 || countOut > 1) {
     return 1;
   }
+
   kuz::darray< kuz::Person > persons = kuz::makeDarray< kuz::Person >(8);
   while (!source->eof()) {
     kuz::Person p = kuz::readPerson(*source);
     if (!source->fail()) {
-      kuz::pushBackDarray(persons, p);
+      if (!kuz::containsDarray(persons, p, kuz::equalPersons)) {
+        kuz::pushBackDarray(persons, p);
+      }
     } else {
       source->clear();
       std::streamsize n = std::numeric_limits< std::streamsize >::max();
@@ -62,7 +67,14 @@ int main(int argc, char** argv)
     }
   }
 
+  for (size_t i = 0; i < persons.size; ++i) {
+    *output << persons.data[i].id << ' ' << persons.data[i].info << '\n';
+  }
+  if (persons.size == 0) {
+    *output << '\n';
+  }
 
+  kuz::clearDarray(persons);
 }
 
 kuznetsov::Person kuznetsov::readPerson(std::istream& in)
@@ -80,4 +92,11 @@ kuznetsov::Person kuznetsov::readPerson(std::istream& in)
   }
   in >> inf;
   return Person{id, inf};
+}
+
+bool kuznetsov::equalPersons(const Person& a, const Person& b)
+{
+  bool f = a.id == b.id;
+  f = f && a.info == b.info;
+  return f;
 }

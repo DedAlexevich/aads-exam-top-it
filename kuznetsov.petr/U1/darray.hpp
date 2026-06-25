@@ -78,6 +78,17 @@ namespace kuznetsov {
     clearDarray(tmp);
   }
 
+  template< class T, class E >
+  bool containsDarray(darray< T >& dr, const T& val, E eq)
+  {
+    for (size_t i = 0; i < dr.size; ++i) {
+      if (eq(dr.data[i], val)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
 }
 
 #endif
