@@ -31,3 +31,20 @@ bool kuznetsov::equalPersons(const Person& a, const Person& b)
   return f;
 }
 
+kuznetsov::darray< kuznetsov::Person > kuznetsov::readArray(std::istream& in, size_t& cSucces, size_t& cFail)
+{
+  darray< Person > persons = makeDarray< Person >(8);
+  in >> std::ws;
+  while (!in.eof()) {
+    bool s = false;
+    Person p = readPerson(in, s);
+    if (s && !containsDarray(persons, p, equalPersons)) {
+      pushBackDarray(persons, p);
+      ++cSucces;
+    } else {
+      ++cFail;
+    }
+    in >> std::ws;
+  }
+  return persons;
+}

@@ -6,8 +6,6 @@
 
 namespace kuznetsov {
 
-
-
 }
 
 int main(int argc, char** argv)
@@ -55,19 +53,7 @@ int main(int argc, char** argv)
   }
 
   size_t cSucces = 0, cFail = 0;
-  kuz::darray< kuz::Person > persons = kuz::makeDarray< kuz::Person >(8);
-  *source >> std::ws;
-  while (!source->eof()) {
-    bool s = false;
-    kuz::Person p = kuz::readPerson(*source, s);
-    if (s && !kuz::containsDarray(persons, p, kuz::equalPersons)) {
-      kuz::pushBackDarray(persons, p);
-      ++cSucces;
-    } else {
-      ++cFail;
-    }
-    *source >> std::ws;
-  }
+  kuz::darray< kuz::Person > persons = kuz::readArray(*source, cSucces, cFail);
   ifile.close();
   if (countOut == 1) {
     ofile.open(oPath);
