@@ -1,13 +1,10 @@
-#include <iostream>
 #include <cstddef>
 #include <fstream>
-#include "person.hpp"
-#include "darray.hpp"
+#include <iostream>
+#include <darray.hpp>
+#include <person.hpp>
 
 namespace kuznetsov {
-  Person readPerson(std::istream& in, bool& success);
-  bool equalPersons(const Person& a, const Person& b);
-
 
 }
 
@@ -56,19 +53,7 @@ int main(int argc, char** argv)
   }
 
   size_t cSucces = 0, cFail = 0;
-  kuz::darray< kuz::Person > persons = kuz::makeDarray< kuz::Person >(8);
-  *source >> std::ws;
-  while (!source->eof()) {
-    bool s = false;
-    kuz::Person p = kuz::readPerson(*source, s);
-    if (s && !kuz::containsDarray(persons, p, kuz::equalPersons)) {
-      kuz::pushBackDarray(persons, p);
-      ++cSucces;
-    } else {
-      ++cFail;
-    }
-    *source >> std::ws;
-  }
+  kuz::darray< kuz::Person > persons = kuz::readArray(*source, cSucces, cFail);
   ifile.close();
   if (countOut == 1) {
     ofile.open(oPath);
@@ -90,32 +75,3 @@ int main(int argc, char** argv)
   kuz::clearDarray(persons);
 }
 
-kuznetsov::Person kuznetsov::readPerson(std::istream& in, bool& success)
-{
-  size_t id;
-  in >> id;
-  if (!in) {
-    success = false;
-    in.clear();
-    std::string skip;
-    std::getline(in, skip);
-    return {};
-  }
-  while (in.peek() == ' ' || in.peek() == '\t') {
-    in.ignore();
-  }
-  std::string inf;
-  std::getline(in, inf);
-  if (inf.empty()) {
-    success = false;
-    return {};
-  }
-  success = true;
-  return Person{id, inf};
-}
-
-bool kuznetsov::equalPersons(const Person& a, const Person& b)
-{
-  bool f = a.id == b.id;
-  return f;
-}

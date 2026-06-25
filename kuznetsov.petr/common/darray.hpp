@@ -78,6 +78,26 @@ namespace kuznetsov {
     clearDarray(tmp);
   }
 
+  template< class  T >
+  void removeDarray(darray< T >& dr, size_t pos)
+  {
+    if (pos >= dr.size) {
+      throw std::logic_error("Pos");
+    }
+    darray< T > cp = copyDarray(dr);
+    try {
+      for (size_t i = pos; i + 1 < dr.size; ++i) {
+        cp.data[i] = std::move(cp.data[i + 1]);
+      }
+      --cp.size;
+      swapDarray(dr, cp);
+    } catch (...) {
+      clearDarray(cp);
+      throw;
+    }
+    clearDarray(cp);
+  }
+
   template< class T, class E >
   bool containsDarray(darray< T >& dr, const T& val, E eq)
   {
