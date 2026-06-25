@@ -6,7 +6,7 @@
 #include "darray.hpp"
 
 namespace kuznetsov {
-  Person readPerson(std::istream& in);
+  Person readPerson(std::istream& in, bool& success);
   bool equalPersons(const Person& a, const Person& b);
 
 
@@ -52,10 +52,13 @@ int main(int argc, char** argv)
   if (countInp > 1 || countOut > 1) {
     return 1;
   }
-
+  size_t cSucces = 0, cFail = 0;
   kuz::darray< kuz::Person > persons = kuz::makeDarray< kuz::Person >(8);
   while (!source->eof()) {
-    kuz::Person p = kuz::readPerson(*source);
+    bool s = false;
+    kuz::Person p = kuz::readPerson(*source, s);
+    cSucces += s;
+    cFail += !s;
     if (!source->fail()) {
       if (!kuz::containsDarray(persons, p, kuz::equalPersons)) {
         kuz::pushBackDarray(persons, p);
@@ -73,11 +76,11 @@ int main(int argc, char** argv)
   if (persons.size == 0) {
     *output << '\n';
   }
-
+  std::cerr << cSucces << ' ' << cFail << '\n';
   kuz::clearDarray(persons);
 }
 
-kuznetsov::Person kuznetsov::readPerson(std::istream& in)
+kuznetsov::Person kuznetsov::readPerson(std::istream& in, bool& success)
 {
   size_t id;
   std::string inf;
@@ -88,9 +91,11 @@ kuznetsov::Person kuznetsov::readPerson(std::istream& in)
   }
   if (!in || c == '\n') {
     in.setstate(std::ios::failbit);
+    success = false;
     return {};
   }
   in >> inf;
+  success = true;
   return Person{id, inf};
 }
 
