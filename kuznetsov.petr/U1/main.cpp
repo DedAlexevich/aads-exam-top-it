@@ -42,13 +42,10 @@ int main(int argc, char** argv)
     }
   }
 
-  if (iPath == oPath) {
-    return 1;
-  }
-
   if (countInp > 1 || countOut > 1) {
     return 1;
   }
+
   if (countInp == 1) {
     ifile.open(iPath);
     if (!ifile) {
@@ -56,14 +53,6 @@ int main(int argc, char** argv)
       return 2;
     }
     source = &ifile;
-  }
-  if (countOut == 1) {
-    ofile.open(oPath);
-    if (!ofile) {
-      std::cerr << "Cant open file\n";
-      return 2;
-    }
-    output = &ofile;
   }
 
   size_t cSucces = 0, cFail = 0;
@@ -82,6 +71,16 @@ int main(int argc, char** argv)
       std::streamsize n = std::numeric_limits< std::streamsize >::max();
       source->ignore(n, '\n');
     }
+  }
+  ifile.close();
+  if (countOut == 1) {
+    ofile.open(oPath);
+    if (!ofile) {
+      std::cerr << "Cant open file\n";
+      kuz::clearDarray(persons);
+      return 2;
+    }
+    output = &ofile;
   }
 
   for (size_t i = 0; i < persons.size; ++i) {
